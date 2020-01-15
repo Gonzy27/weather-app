@@ -27,14 +27,21 @@ const url = 'https://api.darksky.net/forecast/44406adf5c6fd6af1e2842430e29c31e/3
 //     }
 // })
 
-
-geocode('Santiago', (error, data) => {
-    console.log('Error:', error);
-    console.log('Data:', data);
-    if(error == undefined){
-        forecast(data.latitud, data.longitud, (error, dataForecast) => {
-            console.log('Error:', error);
-            console.log('Data:', dataForecast);
+const address = process.argv[2];
+if(!address === undefined){
+    return console.log('No se ingresó ninguna ciudad');
+}else{
+    geocode(address, (error, {latitud, longitud, localizacion}) => {
+        if(error){
+            return console.log(error);
+        }
+        
+        forecast(latitud, longitud, (error, dataForecast) => {
+            if(error){
+                return console.log(error);
+            }
+            console.log(localizacion);
+            console.log(dataForecast);
         })
-    }
-})
+    })    
+}
